@@ -12,7 +12,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# Configure CORS - update with your Netlify URL in production
+CORS(app, resources={
+    r"/api/*": {
+        "origins": os.getenv("ALLOWED_ORIGINS", "*").split(","),
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # HLS output directory
 HLS_OUTPUT_DIR = Path('hls_output')
