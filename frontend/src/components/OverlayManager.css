@@ -1,0 +1,52 @@
+.overlay-manager {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay-manager h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.empty-message {
+  color: #999;
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.overlay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.overlay-preview-text {
+  font-size: 0.9rem;
+  color: #333;
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overlay-preview-image {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.overlay-preview-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}

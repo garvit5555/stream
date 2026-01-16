@@ -1,0 +1,6 @@
+hls_output/
+*.m3u8
+*.ts
+__pycache__/
+*.pyc
+.env
