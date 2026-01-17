@@ -136,8 +136,8 @@ When you enter an RTSP URL, the backend automatically converts it to HLS format 
 
 ## 🚀 Live Deployment
 
-- **Frontend:** [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/)
-- **Backend API:** [https://livestream-backend-tdes.onrender.com/api](https://livestream-backend-tdes.onrender.com/api)
+- **Frontend:** Deployed on Netlify
+- **Backend API:** Deployed on Render
 
 The application is fully deployed and ready to use! Just visit the frontend URL to start managing overlays on your livestream.
 
