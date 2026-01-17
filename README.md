@@ -2,6 +2,12 @@
 
 A web application for managing livestream videos with customizable overlays. Built with Flask (Python), PostgreSQL, and React.
 
+## 🌐 Live Demo
+
+**Try it now:** [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/)
+
+![Livestream Overlay Manager](https://livestreamx.netlify.app/)
+
 ## Features
 
 - **Livestream Playback**: Play RTSP streams with automatic HLS conversion for browser compatibility
@@ -128,15 +134,23 @@ When you enter an RTSP URL, the backend automatically converts it to HLS format 
 └── README.md
 ```
 
+## 🚀 Live Deployment
+
+- **Frontend:** [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/)
+- **Backend API:** [https://livestream-backend-tdes.onrender.com/api](https://livestream-backend-tdes.onrender.com/api)
+
+The application is fully deployed and ready to use! Just visit the frontend URL to start managing overlays on your livestream.
+
 ## Usage
 
-1. Start the backend server
-2. Start the frontend development server
-3. Open `http://localhost:3000` in your browser
-4. Configure the RTSP stream URL in Stream Settings
-5. Add overlays using the "Add Overlay" button
-6. Drag and resize overlays directly on the video
-7. Use Play/Pause and Volume controls to manage playback
+1. Visit [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/) or run locally:
+2. Start the backend server (if running locally)
+3. Start the frontend development server (if running locally)
+4. Open the application in your browser
+5. Configure the RTSP stream URL in Stream Settings
+6. Add overlays using the "Add Overlay" button
+7. Drag and resize overlays directly on the video
+8. Use Play/Pause and Volume controls to manage playback
 
 ## Development
 
