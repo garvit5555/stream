@@ -6,7 +6,7 @@ A web application for managing livestream videos with customizable overlays. Bui
 
 **Try it now:** [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/)
 
-![Livestream Overlay Manager](./images/example.png)
+![Livestream Overlay Manager](./images/example.jpeg)
 
 ## Features
 
