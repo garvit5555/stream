@@ -6,10 +6,16 @@ A web application for managing livestream videos with customizable overlays. Bui
 
 **Try it now:** [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/)
 
-![Livestream Overlay Manager](./images/example.jpeg)
+### Login Page
+
+![Login Page](./images/login-page.png)
+
+The application features a secure login/registration system. Users must create an account to access their personalized overlay management interface.
 
 ## Features
 
+- **🔐 JWT Authentication**: Secure user registration and login with JWT tokens
+- **👥 Multi-User Support**: Each user has their own isolated overlays and stream settings
 - **Livestream Playback**: Play RTSP streams with automatic HLS conversion for browser compatibility
 - **RTSP to HLS Conversion**: Automatic conversion of RTSP streams to HLS format using FFmpeg
 - **Overlay Management**: Create, edit, and delete text and image overlays
@@ -61,11 +67,14 @@ Create a `.env` file:
 cp .env.example .env
 ```
 
-Edit `.env` with your database credentials:
+Edit `.env` with your database credentials and secret key:
 
 ```
 DATABASE_URL=postgresql://username:password@localhost:5432/livestream_db
+SECRET_KEY=your-secret-key-here-change-in-production
 ```
+
+**Important:** Generate a strong random string for `SECRET_KEY` (used for JWT token signing).
 
 Run the backend:
 
@@ -104,18 +113,50 @@ When you enter an RTSP URL, the backend automatically converts it to HLS format 
 - **Use web-compatible URLs**: Direct MP4, HLS (.m3u8), or DASH streams
 - **Use RTSP.me**: For testing, convert RTSP to web-compatible format
 
+## 🔐 Authentication
+
+The application uses JWT (JSON Web Tokens) for secure authentication. Each user has their own isolated data.
+
+### User Registration & Login
+
+![Login Interface](./images/login-page.png)
+
+**Features:**
+- Secure password hashing using Werkzeug
+- JWT token-based authentication
+- Token expiration after 7 days
+- User-specific data isolation
+
+**How it works:**
+1. Users register with username, email, and password
+2. Upon successful registration/login, a JWT token is issued
+3. Token is stored in browser localStorage
+4. All API requests include the token in the Authorization header
+5. Each user can only access their own overlays and stream settings
+
+For detailed authentication documentation, see [AUTHENTICATION.md](AUTHENTICATION.md)
+
 ## API Endpoints
 
-### Stream Settings
-- `GET /api/stream/settings` - Get current stream settings
-- `POST /api/stream/settings` - Update stream settings
+### Authentication (Public)
+- `POST /api/auth/register` - Register a new user
+  - Body: `{ "username": "...", "email": "...", "password": "..." }`
+- `POST /api/auth/login` - Login user
+  - Body: `{ "username": "...", "password": "..." }`
+- `GET /api/auth/me` - Get current user info (requires authentication)
 
-### Overlays
-- `GET /api/overlays` - Get all overlays
-- `GET /api/overlays/<id>` - Get a specific overlay
-- `POST /api/overlays` - Create a new overlay
-- `PUT /api/overlays/<id>` - Update an overlay
-- `DELETE /api/overlays/<id>` - Delete an overlay
+### Stream Settings (Protected - Requires Authentication)
+- `GET /api/stream/settings` - Get current user's stream settings
+- `POST /api/stream/settings` - Update current user's stream settings
+
+### Overlays (Protected - Requires Authentication)
+- `GET /api/overlays` - Get all overlays for current user
+- `GET /api/overlays/<id>` - Get a specific overlay (must belong to user)
+- `POST /api/overlays` - Create a new overlay for current user
+- `PUT /api/overlays/<id>` - Update an overlay (must belong to user)
+- `DELETE /api/overlays/<id>` - Delete an overlay (must belong to user)
+
+**Note:** All protected endpoints require an `Authorization: Bearer <token>` header.
 
 ## Project Structure
 
@@ -143,14 +184,17 @@ The application is fully deployed and ready to use! Just visit the frontend URL 
 
 ## Usage
 
-1. Visit [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/) or run locally:
-2. Start the backend server (if running locally)
-3. Start the frontend development server (if running locally)
-4. Open the application in your browser
-5. Configure the RTSP stream URL in Stream Settings
-6. Add overlays using the "Add Overlay" button
-7. Drag and resize overlays directly on the video
-8. Use Play/Pause and Volume controls to manage playback
+1. Visit [https://livestreamx.netlify.app/](https://livestreamx.netlify.app/) or run locally
+2. **Register a new account** or **login** if you already have one
+3. Start the backend server (if running locally)
+4. Start the frontend development server (if running locally)
+5. Open the application in your browser
+6. Configure the RTSP stream URL in Stream Settings
+7. Add overlays using the "Add Overlay" button
+8. Drag and resize overlays directly on the video
+9. Use Play/Pause and Volume controls to manage playback
+
+**Note:** Each user account has its own isolated overlays and stream settings. Multiple users can use the application simultaneously without interfering with each other's data.
 
 ## Development
 
