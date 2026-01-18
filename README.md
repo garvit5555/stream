@@ -119,7 +119,7 @@ The application uses JWT (JSON Web Tokens) for secure authentication. Each user 
 
 ### User Registration & Login
 
-![Login Interface](./images/login-page.png)
+![Login Interface](./images/login.jpeg)
 
 **Features:**
 - Secure password hashing using Werkzeug
