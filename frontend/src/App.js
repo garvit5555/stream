@@ -4,20 +4,61 @@ import VideoPlayer from './components/VideoPlayer';
 import OverlayManager from './components/OverlayManager';
 import OverlayForm from './components/OverlayForm';
 import StreamSettings from './components/StreamSettings';
-import { getOverlays, createOverlay, updateOverlay, deleteOverlay, getStreamSettings, updateStreamSettings } from './services/api';
+import Login from './components/Login';
+import { getOverlays, createOverlay, updateOverlay, deleteOverlay, getStreamSettings, updateStreamSettings, getCurrentUser } from './services/api';
+import { authService } from './services/auth';
 
 function App() {
+  const [user, setUser] = useState(null);
   const [overlays, setOverlays] = useState([]);
   const [streamUrl, setStreamUrl] = useState('');
   const [streamSettings, setStreamSettings] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingOverlay, setEditingOverlay] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadOverlays();
-    loadStreamSettings();
+    checkAuth();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      loadOverlays();
+      loadStreamSettings();
+    }
+  }, [user]);
+
+  const checkAuth = async () => {
+    if (authService.isAuthenticated()) {
+      try {
+        const userData = await getCurrentUser();
+        setUser(userData);
+        // Also set from localStorage in case API fails
+        const storedUser = authService.getUser();
+        if (storedUser) {
+          setUser(storedUser);
+        }
+      } catch (error) {
+        // Token might be invalid, clear auth
+        authService.clearAuth();
+        setUser(null);
+      }
+    }
+    setLoading(false);
+  };
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    authService.clearAuth();
+    setUser(null);
+    setOverlays([]);
+    setStreamUrl('');
+    setStreamSettings(null);
+  };
 
   const loadOverlays = async () => {
     try {
@@ -105,16 +146,32 @@ function App() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="App">
+        <div style={{ textAlign: 'center', padding: '2rem' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Livestream Overlay Manager</h1>
         <div className="header-actions">
+          <span className="user-info">Welcome, {user.username}!</span>
           <button onClick={() => setShowSettings(true)} className="btn btn-secondary">
             Stream Settings
           </button>
           <button onClick={() => setShowForm(true)} className="btn btn-primary">
             Add Overlay
+          </button>
+          <button onClick={handleLogout} className="btn btn-danger">
+            Logout
           </button>
         </div>
       </header>

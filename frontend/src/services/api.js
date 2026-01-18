@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { authService } from './auth';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -8,6 +9,48 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// Add token to requests
+api.interceptors.request.use(
+  (config) => {
+    const token = authService.getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle 401 errors (unauthorized)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      authService.clearAuth();
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Authentication
+export const register = async (username, email, password) => {
+  const response = await api.post('/auth/register', { username, email, password });
+  return response.data;
+};
+
+export const login = async (username, password) => {
+  const response = await api.post('/auth/login', { username, password });
+  return response.data;
+};
+
+export const getCurrentUser = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
+};
 
 // Stream Settings
 export const getStreamSettings = async () => {
