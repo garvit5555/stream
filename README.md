@@ -8,7 +8,7 @@ A web application for managing livestream videos with customizable overlays. Bui
 
 ### Login Page
 
-![Login Page](./images/login-page.png)
+![Login Page](./images/example.jpeg)
 
 The application features a secure login/registration system. Users must create an account to access their personalized overlay management interface.
 
